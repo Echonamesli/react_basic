@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>组件的props</title>
+</head>
+
+<body>
+    <div id="test1"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types，用于对组件标签属性进行限制 -->
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+    <script type="text/babel">
+        class Person extends React.Component {
+            constructor(props) {  //构造器中接收props（可省略）
+                super(props)  //把props传给super（可省略）
+                console.log(this.props);  //只有构造器中接收了prop并传给super才可以访问实例的props（构造器的this是实例哦）
+            }
+            //对标签属性进行类型、必要性的限制
+            static propTypes = {  //static是静态属性，静态属性是类的属性，不是实例的属性
+                name: PropTypes.string.isRequired, //限制name为字符串且必传
+                sex: PropTypes.string,
+                age: PropTypes.number
+            }
+            static defaultProps = {
+                sex: "男",
+                age: 18,
+            }
+            render() {
+                const { name, sex, age } = this.props //props是只读的
+                return (
+                    <ul>
+                        <li>姓名：{name}</li>
+                        <li>性别：{sex}</li>
+                        <li>年龄：{age + 1}</li>
+                    </ul>
+                )
+            }
+        }
+
+        ReactDOM.render(<Person name="jerry" />, document.getElementById('test1'))
+
+    </script>
+</body>
+
+</html>

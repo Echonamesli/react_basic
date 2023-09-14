@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>组件的state</title>
+  </head>
+
+  <body>
+    <!-- alt+shift+A  准备好一个容器 -->
+    <div id="test"></div>
+
+    <!-- 引入react核心库 -->
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <!-- 引入react-dom,用于支持react操作DOM -->
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <!-- 引入Babel，用于将react的jsx语法转为js，因为浏览器只认识js -->
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <script type="text/babel">
+      //1、创建类式组件
+      class Weather extends React.Component {
+        //初始化状态
+        state = { isHot: false, wind: "微风" };
+        render() {
+          const { isHot, wind } = this.state;
+          return (
+            <h1 onClick={this.changeWeather}>
+              今天天气很{isHot ? "炎热" : "凉爽"}
+            </h1>
+          );
+        }
+        //自定义方法——赋值语句+箭头函数（解决自定义方法的this为undefined的两种方法：1——bind();2——箭头函数）
+        changeWeather=()=> {
+          const isHot = this.state.isHot;
+          /* setState扩展：setState是同步的方法，但它里面引起react更新state的动作是异步的，即同步里是异步
+             
+            setState(stateChange,[callback])——对象式的setState
+             1、stateChange为状态改变对象
+             2、callback为可选的回调函数，它在状态更新完毕，界面也更新后(render调用后)才被调用
+             this.setState({ isHot: !isHot },()=>{
+              console.log('当前的isHot为',isHot)
+             });
+
+            setState(updater,[callback])——函数式的setState(接收state和props)
+            this.setState((state,props)=>{
+              return {isHot: !isHot}
+            })
+            总结：对象式的setState是函数式的setState的简写方式(语法糖)
+              如果新状态不依赖于原状态——对象式
+              如果新状态依赖于原状态——函数式
+              如果需要在setState()执行后获取最新的改变后的状态数据，要在第二个callback获取，因为是异步的，如果在外面获取不能保证拿到最新的state
+          */
+          this.setState({ isHot: !isHot });
+        }
+      }
+      //2.渲染组件到页面
+      ReactDOM.render(<Weather />, document.getElementById("test"));
+    </script>
+  </body>
+</html>

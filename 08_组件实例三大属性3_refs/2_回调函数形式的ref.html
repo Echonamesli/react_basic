@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>回调函数形式的ref</title>
+</head>
+
+<body>
+    <div id="test1"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <script type="text/babel">
+        class Demo extends React.Component {
+            //展示左侧输入框的数据
+            showData = () => {
+                //这时候的input1属性是加在组件实例身上的
+                const { input1 } = this
+                alert(input1.value)
+            }
+            //展示右侧输入框的数据
+            showData2 = () => {
+                const { input2 } = this
+                alert(input2.value)
+            }
+            render() {
+                return (
+                    //ref=一个函数，所以react才会自动帮你调用这个函数，赋予组件实例对象input1这个属性(属性的值为input输入框这个节点)，this是Demo实例
+                    //即把这个节点放在组件实例身上，并给这个节点起了个名字叫做input1
+                    //因为是ref这个属性，所以react才会自动帮你调用ref绑定的回调函数
+                    <div>
+                        {/* jsx标签里面写注释的方法 */}
+                        <input ref={(currentNode) => { this.input1 = currentNode }} type="text" placeholder="点击按钮提示数据" />&nbsp;
+                        <button onClick={this.showData}>点我提示左侧的数据</button>&nbsp;
+                        <input ref={(c) => this.input2 = c} onBlur={this.showData2} type="text" placeholder="失去焦点提示数据" />
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Demo />, document.getElementById('test1'))
+    </script>
+</body>
+
+</html>

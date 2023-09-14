@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>引出生命周期</title>
+</head>
+
+<body>
+    <div id="test1"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <script type="text/babel">
+        /* 旧生命周期
+                1、初始化阶段：由ReactDOM.render()触发 --初次渲染
+                    1、constructor()
+                    2、组件将要挂载componentWillMount()
+                    3、组件挂载完毕componentDidMount()  ==> 一般在这个钩子中做一些初始化的事，比如开启定时器、发送网络请求、订阅消息
+
+                2、更新阶段：由组件内部this.setState()或者父组件重新render触发
+                    1、控制组件更新的“阀门” shouldComponentUpdate()
+                    2、组件将要更新componentWillUpdate()（组件强制更新forceUpdate）
+                    3、render()  ==> 必须使用的钩子
+                    4、组件更新完毕componentDidUpadate()
+
+                3|卸载组件：由ReactDOM.unmountComponentAtNode()触发
+                        1、componentWillUnmount() ==> 一般在这个钩子中做一些收尾的事，比如关闭定时器、取消订阅消息
+
+            新生命周期
+                1、初始化阶段：由ReactDOM.render()触发 --初次渲染
+                    1、constructor()
+                    2、getDerivedStateFromProps
+                    3、render()
+                    4、componentDidMount()
+
+                2、更新阶段：由组件内部this.setState()或者父组件重新render触发
+                    1、getDerivedStateFromProps
+                    2、shouldComponentUpdate（）
+                    3、render() 
+                    4、getSnapshotBeforeUpdate
+                    5、组件更新完毕componentDidUpadate()
+
+                3|卸载组件：由ReactDOM.unmountComponentAtNode()触发
+                        1、componentWillUnmount() 
+        */
+        class Life extends React.Component {
+            state = { opacity: 1 }
+
+            death = () => {
+                //卸载组件
+                ReactDOM.unmountComponentAtNode(document.getElementById('test1'))
+            }
+
+            //组件挂在页面之后调用（意味着只调用一次，而不像render那样每次页面发生更新之后都会调用）,是通过Life组件的实例对象自动调用的
+            componentDidMount() {
+                this.timer = setInterval(() => {
+                    let { opacity } = this.state
+                    opacity -= 0.1
+                    if (opacity <= 0) opacity = 1
+                    this.setState({ opacity })
+                }, 200)
+            }
+
+            //组件将要卸载的时候会自动执行的内容
+            componentWillUnmount() {
+                //清除定时器
+                clearInterval(this.timer)
+            }
+
+            //render调用的时机：初始化渲染、状态更新之后(所以不能在render里面开定时器更新状态，因为每次setState之后就会重新渲染render，则定时器会不断叠加)
+            render() {
+                return (
+                    <div>
+                        {/* 让h2标签从完全可见到彻底消失，耗时两秒 */}
+                        <h2 style={{ opacity: this.state.opacity }}>React学不会怎么办</h2>
+                        <button onClick={this.death}>凉拌</button>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Life />, document.getElementById('test1'))
+    </script>
+</body>
+
+</html>

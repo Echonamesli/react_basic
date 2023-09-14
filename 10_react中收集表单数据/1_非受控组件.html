@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>非受控组件</title>
+</head>
+
+<body>
+    <div id="test1"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <script type="text/babel">
+        class Login extends React.Component {
+            handleSubmit = (event) => {
+                event.preventDefault() //阻止表单提交
+                const { username, password } = this
+                alert(`你输入的用户名是：${username.value};你输入的密码是：${password.value}`)
+            }
+            render() {
+                return (
+                    //如果不指定请求方式的话，form默认是GET请求，默认带query参数,会把表单数据转换成一个字串（name1=value1&name2=value2…），然后把这个字串append到url后面，用?分割，跳到这个新的url
+                    <form action="http://www.atguigu.com" onSubmit={this.handleSubmit}>
+                        用户名：<input ref={c => this.username = c} type="text" name="username" />
+                        密码：<input ref={c => this.password = c} type="password" name="password" />
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+        ReactDOM.render(<Login />, document.getElementById('test1'))
+    </script>
+</body>
+
+</html>
