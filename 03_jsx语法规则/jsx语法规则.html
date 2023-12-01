@@ -43,9 +43,9 @@
         /*
             jsx语法规则：
                 1.定义虚拟DOM时，不要写引号
-                2.标签中混入js表达式要用{}
+                2.标签中混入js表达式要用{}——if语句、switch语句、变量声明属于语句，不是表达式，不能出现在{}中
                 3.样式类名指定不要用class，要用className
-                4.内联样式，要用style={{key:value}}的形式去写
+                4.内联样式，要用style={{key:value}}的形式去写——最外层的大括号是jsx中用来识别js中的表达式，内层的括号是识别样式对象结构
                 5.虚拟DOM里必须只有一个根标签（类似vue的template）
                 6.标签必须闭合，不能是<input type="text">,必须是<input type="text"/>或者<input type="text"></input> 
                 7.目前写的不是html标签，而是jsx标签（会被转化为html标签）

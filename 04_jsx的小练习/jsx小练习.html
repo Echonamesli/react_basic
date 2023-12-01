@@ -40,15 +40,36 @@
         */
         //模拟一些数据,react默认自动遍历数组,不能遍历对象
         const data = ['Angular', 'React', 'Vue']
+        const isLogin = false
+        const articleType = 1   // 0 1 3
+        function getArticle(){
+            if(articleType === 0){
+                return <div>我是无图文章</div>
+            }else if(articleType === 1){
+                return <div>我是单图模式</div>
+            }else{
+                return <div>我是三图模式</div>
+            }
+        }
         //1、创建虚拟dom
         const VDOM = (
             <div>
-                <h1>前端js框架列表</h1>
+                <h1>jsx实现列表渲染</h1>
                 <ul>
                     {data.map((item,index)=>{
                         return <li key={index}>{item}</li>
                     })}
                 </ul>
+
+                <h1>jsx实现基础条件渲染的两种方式</h1>
+                {/* 1、逻辑与：isLogin为true时后面的才会显示 */}
+                {isLogin && <span>我的天才女友</span>}
+                {/* 2、三元运算符 */}
+                {isLogin ? <span>jack</span> : <span>not jack</span>}
+
+                <h1>jsx实现复杂条件渲染</h1>
+                {/* 调用函数渲染不同的模板 */}
+                {getArticle()}
             </div>
         )
         //2、渲染虚拟dom到页面
